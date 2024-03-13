@@ -32,10 +32,10 @@ fi
 if [ "$language" = "swift" ]; then
      # Clean the Generated Swift Models
      if $clean; then
-          if [ -d "./Sources/OSRM/Models" ]; then
-               rm -r ./Sources/OSRM/Models
+          if [ -d "./apple/Sources/OSRM/Models" ]; then
+               rm -r ./apple/Sources/OSRM/Models
           fi
-          mkdir -p ./Sources/OSRM/Models
+          mkdir -p ./apple/Sources/OSRM/Models
      fi
 
      openapi-generator generate -i ./openapi.yaml -g swift5 --strict-spec=true \
@@ -44,7 +44,7 @@ if [ "$language" = "swift" ]; then
 
      swiftformat .build/OpenAPIClient/Classes/OpenAPIsModels
 
-     cp .build/OpenAPIClient/Classes/OpenAPIsModels/* ./Sources/OSRM/Models
+     cp .build/OpenAPIClient/Classes/OpenAPIsModels/* ./apple/Sources/OSRM/Models
 else
      echo "Language not supported"
      exit 1

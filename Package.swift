@@ -14,12 +14,16 @@ let package = Package(
             targets: ["OSRM"]
         )
     ],
+    dependencies: [
+        .package(url: "https://github.com/Flight-School/AnyCodable", from: "0.6.1"),
+    ],
     targets: [
         .target(
             name: "OSRM",
             dependencies: [
                 "AnyCodable"
-            ]
+            ],
+            path: "apple/Sources/OSRM"
         )
     ]
 )
