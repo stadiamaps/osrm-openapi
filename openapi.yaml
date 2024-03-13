@@ -1,0 +1,314 @@
+openapi: 3.0.1
+info:
+  title: OSRM API v5.22.0
+  description: Open Source Routing Machine Models
+  version: "1"
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          enum:
+            - Ok
+            - InvalidUrl
+            - InvalidService
+            - InvalidVersion
+            - InvalidOptions
+            - InvalidQuery
+            - InvalidValue
+            - NoSegment
+            - TooBig
+            - NoRoute
+            - NoTable
+            - NotImplemented
+            - NoTrips
+        message:
+          type: string
+        data_version:
+          type: string
+          format: date-time
+    NearestResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            waypoints:
+              type: array
+              items:
+                $ref: '#/components/schemas/NearestWaypoint'
+    RouteResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            waypoints:
+              type: array
+              items:
+                $ref: '#/components/schemas/Waypoint'
+            routes:
+              type: array
+              items:
+                $ref: '#/components/schemas/Route'
+    TableResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            durations:
+              type: array
+              items:
+                type: array
+                items:
+                  type: number
+                  format: double
+              description: array of arrays that stores the matrix in row-major order. durations[i][j] gives the travel time from the i-th waypoint to the j-th waypoint. Values are given in seconds.
+            distances:
+              type: array
+              items:
+                type: array
+                items:
+                  type: number
+                  format: double
+            sources:
+              type: array
+              items:
+                $ref: '#/components/schemas/Waypoint'
+            destinations:
+              type: array
+              items:
+                $ref: '#/components/schemas/Waypoint'
+            fallback_speed_cells:
+              type: array
+              items:
+                type: array
+                items:
+                  type: integer
+    TripResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            waypoints:
+              type: array
+              items:
+                $ref: '#/components/schemas/TripWaypoint'
+            trips:
+              type: array
+              items:
+                $ref: '#/components/schemas/Route'
+    Route:
+      type: object
+      properties:
+        distance:
+          type: number
+          format: double
+          description: The distance traveled by the route, in double meters.
+        duration:
+          type: number
+          format: double
+          description: The estimated travel time, in double number of seconds.
+        geometry:
+          type: object
+        weight:
+          type: number
+          format: double
+        weight_name:
+          type: string
+        legs:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteLeg'
+    RouteLeg:
+      type: object
+      properties:
+        distance:
+          type: number
+          format: double
+          description: The distance traveled by the route, in double meters.
+        duration:
+          type: number
+          format: double
+          description: The estimated travel time, in double number of seconds.
+        weight:
+          type: number
+          format: double
+        summary:
+          type: string
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteStep'
+        annotation:
+          $ref: '#/components/schemas/Annotation'
+    RouteStep:
+      type: object
+      properties:
+        distance:
+          type: number
+          format: double
+          description: The distance traveled by the route, in double meters.
+        duration:
+          type: number
+          format: double
+          description: The estimated travel time, in double number of seconds.
+        geometry:
+          type: object
+        weight:
+          type: number
+          format: double
+        name:
+          type: string
+        ref:
+          type: string
+        pronunciation:
+          type: string
+        destinations:
+          type: object
+        exits:
+          type: object
+        mode:
+          type: string
+        maneuver:
+          $ref: '#/components/schemas/StepManeuver'
+        intersections:
+          type: array
+          items:
+            $ref: '#/components/schemas/Intersection'
+        rotary_name:
+          type: string
+        rotary_pronunciation:
+          type: string
+        driving_side:
+          type: string
+          enum:
+            - left
+            - right
+    Annotation:
+      type: object
+      properties:
+        distance:
+          type: array
+          items:
+            type: double
+          description: The distance, in metres, between each pair of coordinates
+        duration:
+          type: array
+          items:
+            type: double
+          description: The duration between each pair of coordinates, in seconds
+        datasources:
+          type: array
+          items:
+            type: integer
+        nodes:
+          type: array
+          items:
+            type: integer
+        weight:
+          type: array
+          items:
+            type: integer
+        speed:
+          type: array
+          items:
+            type: number
+            format: double
+        metadata:
+          type: object
+          properties:
+            datasource_names:
+              type: array
+              items:
+                type: string
+    StepManeuver:
+      type: object
+      properties:
+        location:
+          type: array
+          items:
+            type: number
+            format: double
+        bearing_before:
+          type: integer
+        bearing_after:
+          type: integer
+        type:
+          type: string
+        modifier:
+          type: string
+        exit:
+          type: integer
+    Intersection:
+      type: object
+      properties:
+        location:
+          type: array
+          items:
+            type: number
+            format: double
+        bearings:
+          type: array
+          items:
+            type: integer
+        classes:
+          type: array
+          items:
+            type: string
+        entry:
+          type: array
+          items:
+            type: boolean
+        in:
+          type: integer
+        out:
+          type: integer
+        lanes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Lane'
+    Lane:
+      type: object
+      properties:
+        indications:
+          type: array
+          items:
+            type: string
+        valid:
+          type: boolean
+    Waypoint:
+      type: object
+      properties:
+        name:
+          type: string
+        location:
+          type: array
+          items:
+            type: number
+            format: double
+        distance:
+          type: number
+          format: double
+        hint:
+          type: string
+    NearestWaypoint:
+      allOf:
+        - $ref: '#/components/schemas/Waypoint'
+        - type: object
+          properties:
+            nodes:
+              type: array
+              items:
+                type: integer
+    TripWaypoint:
+      allOf:
+        - $ref: '#/components/schemas/Waypoint'
+        - type: object
+          properties:
+            trips_index:
+              type: integer
+            waypoint_index:
+              type: integer
