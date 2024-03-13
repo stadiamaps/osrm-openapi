@@ -12,4 +12,4 @@ OpenAPI spec and generation script to build OSRM Models for various platforms.
 
 ## References 
 
-- OSRM Open API Initial Source - <https://github.com/1papaya/osrm-openapi>
+- OpenAPI spec based on <https://github.com/1papaya/osrm-openapi>, released under the MIT license
