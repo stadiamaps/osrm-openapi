@@ -6,14 +6,14 @@ set -u
 clean=false
 
 language="$1"
-shift
+shift # Remove language (first-arg) from processing
 
 for arg in "$@"
 do
      case $arg in
           --clean)
                clean=true
-               shift # Remove --release from processing
+               shift # Remove --clean from processing
                ;;
           *)
                shift # Ignore other argument from processing
