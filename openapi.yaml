@@ -1,0 +1,736 @@
+openapi: 3.0.1
+info:
+  title: OSRM API v5.22.0
+  description: Open Source Routing Machine API
+  version: "1"
+servers:
+  - url: 'https://router.project-osrm.org'
+  - url: 'https://routing.openstreetmap.de/routed-car'
+  - url: 'https://routing.openstreetmap.de/routed-bike'
+  - url: 'https://routing.openstreetmap.de/routed-foot'
+paths:
+  '/nearest/{version}/{profile}/{coordinate}.json':
+    get:
+      operationId: nearest
+      tags:
+        - OSRM
+      parameters:
+        ## ---- PATH DEFAULTS ----
+        - in: path
+          name: version
+          description: "Version of the protocol implemented by the service. v1 for all OSRM 5.x installations"
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: profile
+          description: "Mode of transportation, is determined statically by the Lua profile that is used to prepare the data using osrm-extract. Typically car, bike or foot if using one of the supplied profiles."
+          schema:
+            type: string
+          required: true
+        ## ---- QUERY DEFAULTS ----
+        - in: query
+          name: bearings
+          description: "Limits the search to segments with given bearing in degrees towards true north in clockwise direction."
+          schema:
+            type: string
+        - in: query
+          name: radiuses
+          description: "Limits the search to given radius in meters."
+          schema:
+            type: string
+        - in: query
+          name: generate_hints
+          description: "Adds a Hint to the response which can be used in subsequent requests, see hints parameter."
+          schema:
+            type: boolean
+        - in: query
+          name: hints
+          description: "Hint from previous request to derive position in street network."
+          schema:
+            type: string
+        - in: query
+          name: approaches
+          description: "Keep waypoints on curb side."
+          schema:
+            type: string
+        - in: query
+          name: exclude
+          description: "Additive list of classes to avoid, order does not matter."
+          schema:
+            type: string
+        ## ---- PATH ----
+        - in: path
+          name: coordinate
+          schema:
+            type: string
+          required: true
+        ## ---- QUERY ----
+        - in: query
+          name: number
+          description: "Number of nearest segments that should be returned."
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NearestResponse'
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  '/route/{version}/{profile}/{coordinates}':
+    get:
+      operationId: route
+      tags:
+        - OSRM
+      parameters:
+        ## ---- PATH DEFAULTS ----
+        - in: path
+          name: version
+          description: "Version of the protocol implemented by the service. v1 for all OSRM 5.x installations"
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: profile
+          description: "Mode of transportation, is determined statically by the Lua profile that is used to prepare the data using osrm-extract. Typically car, bike or foot if using one of the supplied profiles."
+          schema:
+            type: string
+          required: true
+        ## ---- QUERY DEFAULTS ----
+        - in: query
+          name: bearings
+          description: "Limits the search to segments with given bearing in degrees towards true north in clockwise direction."
+          schema:
+            type: string
+        - in: query
+          name: radiuses
+          description: "Limits the search to given radius in meters."
+          schema:
+            type: string
+        - in: query
+          name: generate_hints
+          description: "Adds a Hint to the response which can be used in subsequent requests, see hints parameter."
+          schema:
+            type: boolean
+        - in: query
+          name: hints
+          description: "Hint from previous request to derive position in street network."
+          schema:
+            type: string
+        - in: query
+          name: approaches
+          description: "Keep waypoints on curb side."
+          schema:
+            type: string
+        - in: query
+          name: exclude
+          description: "Additive list of classes to avoid, order does not matter."
+          schema:
+            type: string
+        ## ---- PATH ----
+        - in: path
+          name: coordinates
+          schema:
+            type: string
+          allowReserved: true
+          required: true
+        ## ---- QUERY ----
+        - in: query
+          name: alternatives
+          description: "Search for alternative routes. Passing a number alternatives=n searches for up to n alternative routes."
+          schema:
+            type: boolean
+            default: false
+        - in: query
+          name: steps
+          description: "Returned route steps for each route leg"
+          schema:
+            type: boolean
+            default: false
+        - in: query
+          name: annotations
+          description: "Returns additional metadata for each coordinate along the route geometry."
+          schema:
+            enum:
+              - true
+              - false
+              - "nodes"
+              - "distance"
+              - "duration"
+              - "datasources"
+              - "weight"
+              - "speed"
+            default: false
+        - in: query
+          name: geometries
+          description: "Returned route geometry format (influences overview and per step)"
+          schema:
+            enum:
+              - "polyline"
+              - "polyline6"
+              - "geojson"
+            default: "polyline"
+        - in: query
+          name: overview
+          description: "Add overview geometry either full, simplified according to highest zoom level it could be display on, or not at all."
+          schema:
+            enum:
+              - "simplified"
+              - "full"
+              - false
+        - in: query
+          name: continue_straight
+          description: "Forces the route to keep going straight at waypoints constraining uturns there even if it would be faster. Default value depends on the profile."
+          schema:
+            enum:
+              - "default"
+              - true
+              - false
+        - in: query
+          name: waypoints
+          description: "Treats input coordinates indicated by given indices as waypoints in returned Match object. Default is to treat all input coordinates as waypoints."
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteResponse'
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  '/table/{version}/{profile}/{coordinates}':
+    get:
+      operationId: "table"
+      tags:
+        - OSRM
+      parameters:
+        ## ---- PATH DEFAULTS ----
+        - in: path
+          name: version
+          description: "Version of the protocol implemented by the service. v1 for all OSRM 5.x installations"
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: profile
+          description: "Mode of transportation, is determined statically by the Lua profile that is used to prepare the data using osrm-extract. Typically car, bike or foot if using one of the supplied profiles."
+          schema:
+            type: string
+          required: true
+        ## ---- QUERY DEFAULTS ----
+        - in: query
+          name: bearings
+          description: "Limits the search to segments with given bearing in degrees towards true north in clockwise direction."
+          schema:
+            type: string
+        - in: query
+          name: radiuses
+          description: "Limits the search to given radius in meters."
+          schema:
+            type: string
+        - in: query
+          name: generate_hints
+          description: "Adds a Hint to the response which can be used in subsequent requests, see hints parameter."
+          schema:
+            type: boolean
+        - in: query
+          name: hints
+          description: "Hint from previous request to derive position in street network."
+          schema:
+            type: string
+        - in: query
+          name: approaches
+          description: "Keep waypoints on curb side."
+          schema:
+            type: string
+        - in: query
+          name: exclude
+          description: "Additive list of classes to avoid, order does not matter."
+          schema:
+            type: string
+        ## ---- PATH ----
+        - in: path
+          name: coordinates
+          schema:
+            type: string
+          allowReserved: true
+          required: true
+        ## ---- QUERY ----
+        - in: query
+          name: sources
+          description: "Use location with given index as source."
+          schema:
+            type: string
+            default: "all"
+        - in: query
+          name: destinations
+          description: "Use location with given index as destination."
+          schema:
+            type: string
+            default: "all"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableResponse'
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  '/trip/{version}/{profile}/{coordinates}':
+    get:
+      operationId: trip
+      tags:
+        - OSRM
+      parameters:
+        ## ---- PATH DEFAULTS ----
+        - in: path
+          name: version
+          description: "Version of the protocol implemented by the service. v1 for all OSRM 5.x installations"
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: profile
+          description: "Mode of transportation, is determined statically by the Lua profile that is used to prepare the data using osrm-extract. Typically car, bike or foot if using one of the supplied profiles."
+          schema:
+            type: string
+          required: true
+        ## ---- QUERY DEFAULTS ----
+        - in: query
+          name: bearings
+          description: "Limits the search to segments with given bearing in degrees towards true north in clockwise direction."
+          schema:
+            type: string
+        - in: query
+          name: radiuses
+          description: "Limits the search to given radius in meters."
+          schema:
+            type: string
+        - in: query
+          name: generate_hints
+          description: "Adds a Hint to the response which can be used in subsequent requests, see hints parameter."
+          schema:
+            type: boolean
+        - in: query
+          name: hints
+          description: "Hint from previous request to derive position in street network."
+          schema:
+            type: string
+        - in: query
+          name: approaches
+          description: "Keep waypoints on curb side."
+          schema:
+            type: string
+        - in: query
+          name: exclude
+          description: "Additive list of classes to avoid, order does not matter."
+          schema:
+            type: string
+        ## ---- PATH ----
+        - in: path
+          name: coordinates
+          schema:
+            type: string
+          required: true
+        ## ---- QUERY ----
+        - in: query
+          name: roundtrip
+          description: "Returned route is a roundtrip (route returns to first location)"
+          schema:
+            type: boolean
+        - in: query
+          name: source
+          description: "Returned route starts at any or first coordinate"
+          schema:
+            type: string
+            enum:
+              - any
+              - first
+        - in: query
+          name: destination
+          description: "Returned route ends at any or last coordinate"
+          schema:
+            type: string
+            enum:
+              - any
+              - last
+        - in: query
+          name: steps
+          description: "Returned route instructions for each trip"
+          schema:
+            type: boolean
+        - in: query
+          name: annotations
+          description: "Returns additional metadata for each coordinate along the route geometry."
+          schema:
+            type: string
+            enum:
+              - "true"
+              - "false"
+              - nodes
+              - distance
+              - duration
+              - datasources
+              - weight
+              - speed
+        - in: query
+          name: geometries
+          description: "Returned route geometry format (influences overview and per step)"
+          schema:
+            type: string
+            enum:
+              - polyline
+              - polyline6
+              - geojson
+        - in: query
+          name: overview
+          description: "Add overview geometry either full, simplified according to highest zoom level it could be display on, or not at all."
+          schema:
+            type: string
+            enum:
+              - simplified
+              - full
+              - "false"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TripResponse'
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          enum:
+            - Ok
+            - InvalidUrl
+            - InvalidService
+            - InvalidVersion
+            - InvalidOptions
+            - InvalidQuery
+            - InvalidValue
+            - NoSegment
+            - TooBig
+            - NoRoute
+            - NoTable
+            - NotImplemented
+            - NoTrips
+        message:
+          type: string
+        data_version:
+          type: string
+          format: date-time
+    NearestResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            waypoints:
+              type: array
+              items:
+                $ref: '#/components/schemas/NearestWaypoint'
+    RouteResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            waypoints:
+              type: array
+              items:
+                $ref: '#/components/schemas/Waypoint'
+            routes:
+              type: array
+              items:
+                $ref: '#/components/schemas/Route'
+    TableResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            durations:
+              type: array
+              items:
+                type: array
+                items:
+                  type: number
+                  format: double
+              description: array of arrays that stores the matrix in row-major order. durations[i][j] gives the travel time from the i-th waypoint to the j-th waypoint. Values are given in seconds.
+            distances:
+              type: array
+              items:
+                type: array
+                items:
+                  type: number
+                  format: double
+            sources:
+              type: array
+              items:
+                $ref: '#/components/schemas/Waypoint'
+            destinations:
+              type: array
+              items:
+                $ref: '#/components/schemas/Waypoint'
+            fallback_speed_cells:
+              type: array
+              items:
+                type: array
+                items:
+                  type: integer
+    TripResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            waypoints:
+              type: array
+              items:
+                $ref: '#/components/schemas/TripWaypoint'
+            trips:
+              type: array
+              items:
+                $ref: '#/components/schemas/Route'
+    Route:
+      type: object
+      properties:
+        distance:
+          type: number
+          format: double
+          description: The distance traveled by the route, in double meters.
+        duration:
+          type: number
+          format: double
+          description: The estimated travel time, in double number of seconds.
+        geometry:
+          type: object
+        weight:
+          type: number
+          format: double
+        weight_name:
+          type: string
+        legs:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteLeg'
+    RouteLeg:
+      type: object
+      properties:
+        distance:
+          type: number
+          format: double
+          description: The distance traveled by the route, in double meters.
+        duration:
+          type: number
+          format: double
+          description: The estimated travel time, in double number of seconds.
+        weight:
+          type: number
+          format: double
+        summary:
+          type: string
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteStep'
+        annotation:
+          $ref: '#/components/schemas/Annotation'
+    RouteStep:
+      type: object
+      properties:
+        distance:
+          type: number
+          format: double
+          description: The distance traveled by the route, in double meters.
+        duration:
+          type: number
+          format: double
+          description: The estimated travel time, in double number of seconds.
+        geometry:
+          type: object
+        weight:
+          type: number
+          format: double
+        name:
+          type: string
+        ref:
+          type: string
+        pronunciation:
+          type: string
+        destinations:
+          type: object
+        exits:
+          type: object
+        mode:
+          type: string
+        maneuver:
+          $ref: '#/components/schemas/StepManeuver'
+        intersections:
+          type: array
+          items:
+            $ref: '#/components/schemas/Intersection'
+        rotary_name:
+          type: string
+        rotary_pronunciation:
+          type: string
+        driving_side:
+          type: string
+          enum:
+            - left
+            - right
+    Annotation:
+      type: object
+      properties:
+        distance:
+          type: array
+          items:
+            type: double
+          description: The distance, in metres, between each pair of coordinates
+        duration:
+          type: array
+          items:
+            type: double
+          description: The duration between each pair of coordinates, in seconds
+        datasources:
+          type: array
+          items:
+            type: integer
+        nodes:
+          type: array
+          items:
+            type: integer
+        weight:
+          type: array
+          items:
+            type: integer
+        speed:
+          type: array
+          items:
+            type: number
+            format: double
+        metadata:
+          type: object
+          properties:
+            datasource_names:
+              type: array
+              items:
+                type: string
+    StepManeuver:
+      type: object
+      properties:
+        location:
+          type: array
+          items:
+            type: number
+            format: double
+        bearing_before:
+          type: integer
+        bearing_after:
+          type: integer
+        type:
+          type: string
+        modifier:
+          type: string
+        exit:
+          type: integer
+    Intersection:
+      type: object
+      properties:
+        location:
+          type: array
+          items:
+            type: number
+            format: double
+        bearings:
+          type: array
+          items:
+            type: integer
+        classes:
+          type: array
+          items:
+            type: string
+        entry:
+          type: array
+          items:
+            type: boolean
+        in:
+          type: integer
+        out:
+          type: integer
+        lanes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Lane'
+    Lane:
+      type: object
+      properties:
+        indications:
+          type: array
+          items:
+            type: string
+        valid:
+          type: boolean
+    Waypoint:
+      type: object
+      properties:
+        name:
+          type: string
+        location:
+          type: array
+          items:
+            type: number
+            format: double
+        distance:
+          type: number
+          format: double
+        hint:
+          type: string
+    NearestWaypoint:
+      allOf:
+        - $ref: '#/components/schemas/Waypoint'
+        - type: object
+          properties:
+            nodes:
+              type: array
+              items:
+                type: integer
+    TripWaypoint:
+      allOf:
+        - $ref: '#/components/schemas/Waypoint'
+        - type: object
+          properties:
+            trips_index:
+              type: integer
+            waypoint_index:
+              type: integer
