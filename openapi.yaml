@@ -187,6 +187,14 @@ components:
           enum:
             - left
             - right
+        voiceInstructions:
+          type: array
+          items:
+            $ref: '#/components/schemas/VoiceInstruction'
+        bannerInstructions:
+          type: array
+          items:
+            $ref: '#/components/schemas/BannerInstruction'
     Annotation:
       type: object
       properties:
@@ -270,6 +278,52 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Lane'
+    VoiceInstruction:
+      type: object
+      required:
+        - distanceAlongGeometry
+        - announcement
+      properties:
+        distanceAlongGeometry:
+          type: number
+          format: double
+        announcement:
+          type: string
+        ssmlAnnouncement:
+          type: string
+    BannerInstruction:
+      type: object
+      required:
+        - distanceAlongGeometry
+        - primary
+      properties:
+        distanceAlongGeometry:
+          type: number
+          format: double
+        primary:
+          $ref: '#/components/schemas/BannerContent'
+        secondary:
+          $ref: '#/components/schemas/BannerContent'
+    BannerContent:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+        type:
+          type: string
+        modifier:
+          type: string
+        components:
+          type: array
+          items:
+            type: object
+            properties:
+              text:
+                type: string
+              type:
+                type: string
     Lane:
       type: object
       properties:
