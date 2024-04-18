@@ -11,12 +11,20 @@ import Foundation
 #endif
 
 public struct BannerContent: Codable, Hashable {
+<<<<<<< HEAD
     public var text: String
+=======
+    public var text: String?
+>>>>>>> 1e308f0f8fdd74de7727c77ec1ca9967b4af17e1
     public var type: String?
     public var modifier: String?
     public var components: [BannerContentComponentsInner]?
 
+<<<<<<< HEAD
     public init(text: String, type: String? = nil, modifier: String? = nil, components: [BannerContentComponentsInner]? = nil) {
+=======
+    public init(text: String? = nil, type: String? = nil, modifier: String? = nil, components: [BannerContentComponentsInner]? = nil) {
+>>>>>>> 1e308f0f8fdd74de7727c77ec1ca9967b4af17e1
         self.text = text
         self.type = type
         self.modifier = modifier
@@ -34,7 +42,11 @@ public struct BannerContent: Codable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+<<<<<<< HEAD
         try container.encode(text, forKey: .text)
+=======
+        try container.encodeIfPresent(text, forKey: .text)
+>>>>>>> 1e308f0f8fdd74de7727c77ec1ca9967b4af17e1
         try container.encodeIfPresent(type, forKey: .type)
         try container.encodeIfPresent(modifier, forKey: .modifier)
         try container.encodeIfPresent(components, forKey: .components)
