@@ -33,8 +33,10 @@ public struct RouteStep: Codable, Hashable {
     public var rotaryName: String?
     public var rotaryPronunciation: String?
     public var drivingSide: DrivingSide?
+    public var voiceInstructions: [VoiceInstruction]?
+    public var bannerInstructions: [BannerInstruction]?
 
-    public init(distance: Double? = nil, duration: Double? = nil, geometry: AnyCodable? = nil, weight: Double? = nil, name: String? = nil, ref: String? = nil, pronunciation: String? = nil, destinations: AnyCodable? = nil, exits: AnyCodable? = nil, mode: String? = nil, maneuver: StepManeuver? = nil, intersections: [Intersection]? = nil, rotaryName: String? = nil, rotaryPronunciation: String? = nil, drivingSide: DrivingSide? = nil) {
+    public init(distance: Double? = nil, duration: Double? = nil, geometry: AnyCodable? = nil, weight: Double? = nil, name: String? = nil, ref: String? = nil, pronunciation: String? = nil, destinations: AnyCodable? = nil, exits: AnyCodable? = nil, mode: String? = nil, maneuver: StepManeuver? = nil, intersections: [Intersection]? = nil, rotaryName: String? = nil, rotaryPronunciation: String? = nil, drivingSide: DrivingSide? = nil, voiceInstructions: [VoiceInstruction]? = nil, bannerInstructions: [BannerInstruction]? = nil) {
         self.distance = distance
         self.duration = duration
         self.geometry = geometry
@@ -50,6 +52,8 @@ public struct RouteStep: Codable, Hashable {
         self.rotaryName = rotaryName
         self.rotaryPronunciation = rotaryPronunciation
         self.drivingSide = drivingSide
+        self.voiceInstructions = voiceInstructions
+        self.bannerInstructions = bannerInstructions
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
@@ -68,6 +72,8 @@ public struct RouteStep: Codable, Hashable {
         case rotaryName = "rotary_name"
         case rotaryPronunciation = "rotary_pronunciation"
         case drivingSide = "driving_side"
+        case voiceInstructions
+        case bannerInstructions
     }
 
     // Encodable protocol methods
@@ -89,5 +95,7 @@ public struct RouteStep: Codable, Hashable {
         try container.encodeIfPresent(rotaryName, forKey: .rotaryName)
         try container.encodeIfPresent(rotaryPronunciation, forKey: .rotaryPronunciation)
         try container.encodeIfPresent(drivingSide, forKey: .drivingSide)
+        try container.encodeIfPresent(voiceInstructions, forKey: .voiceInstructions)
+        try container.encodeIfPresent(bannerInstructions, forKey: .bannerInstructions)
     }
 }
