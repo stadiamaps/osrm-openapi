@@ -11,11 +11,11 @@ import Foundation
 #endif
 
 public struct VoiceInstruction: Codable, Hashable {
-    public var distanceAlongGeometry: Double?
-    public var announcement: String?
+    public var distanceAlongGeometry: Double
+    public var announcement: String
     public var ssmlAnnouncement: String?
 
-    public init(distanceAlongGeometry: Double? = nil, announcement: String? = nil, ssmlAnnouncement: String? = nil) {
+    public init(distanceAlongGeometry: Double, announcement: String, ssmlAnnouncement: String? = nil) {
         self.distanceAlongGeometry = distanceAlongGeometry
         self.announcement = announcement
         self.ssmlAnnouncement = ssmlAnnouncement
@@ -31,8 +31,8 @@ public struct VoiceInstruction: Codable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(distanceAlongGeometry, forKey: .distanceAlongGeometry)
-        try container.encodeIfPresent(announcement, forKey: .announcement)
+        try container.encode(distanceAlongGeometry, forKey: .distanceAlongGeometry)
+        try container.encode(announcement, forKey: .announcement)
         try container.encodeIfPresent(ssmlAnnouncement, forKey: .ssmlAnnouncement)
     }
 }

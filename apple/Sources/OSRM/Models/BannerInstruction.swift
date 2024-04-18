@@ -11,11 +11,11 @@ import Foundation
 #endif
 
 public struct BannerInstruction: Codable, Hashable {
-    public var distanceAlongGeometry: Double?
-    public var primary: BannerInstructionPrimary?
-    public var secondary: BannerInstructionPrimary?
+    public var distanceAlongGeometry: Double
+    public var primary: BannerContent
+    public var secondary: BannerContent?
 
-    public init(distanceAlongGeometry: Double? = nil, primary: BannerInstructionPrimary? = nil, secondary: BannerInstructionPrimary? = nil) {
+    public init(distanceAlongGeometry: Double, primary: BannerContent, secondary: BannerContent? = nil) {
         self.distanceAlongGeometry = distanceAlongGeometry
         self.primary = primary
         self.secondary = secondary
@@ -31,8 +31,8 @@ public struct BannerInstruction: Codable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(distanceAlongGeometry, forKey: .distanceAlongGeometry)
-        try container.encodeIfPresent(primary, forKey: .primary)
+        try container.encode(distanceAlongGeometry, forKey: .distanceAlongGeometry)
+        try container.encode(primary, forKey: .primary)
         try container.encodeIfPresent(secondary, forKey: .secondary)
     }
 }

@@ -280,6 +280,9 @@ components:
             $ref: '#/components/schemas/Lane'
     VoiceInstruction:
       type: object
+      required:
+        - distanceAlongGeometry
+        - announcement
       properties:
         distanceAlongGeometry:
           type: number
@@ -290,46 +293,37 @@ components:
           type: string
     BannerInstruction:
       type: object
+      required:
+        - distanceAlongGeometry
+        - primary
       properties:
         distanceAlongGeometry:
           type: number
           format: double
         primary:
-          type: object
-          properties:
-            text:
-              type: string
-            type:
-              type: string
-            modifier:
-              type: string
-            components:
-              type: array
-              items:
-                type: object
-                properties:
-                  text:
-                    type: string
-                  type:
-                    type: string
+          $ref: '#/components/schemas/BannerContent'
         secondary:
-          type: object
-          properties:
-            text:
-              type: string
-            type:
-              type: string
-            modifier:
-              type: string
-            components:
-              type: array
-              items:
-                type: object
-                properties:
-                  text:
-                    type: string
-                  type:
-                    type: string
+          $ref: '#/components/schemas/BannerContent'
+    BannerContent:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+        type:
+          type: string
+        modifier:
+          type: string
+        components:
+          type: array
+          items:
+            type: object
+            properties:
+              text:
+                type: string
+              type:
+                type: string
     Lane:
       type: object
       properties:
