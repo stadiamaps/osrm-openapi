@@ -1,0 +1,179 @@
+{
+  "routes": [
+    {
+      "weight_name": "auto",
+      "weight": 56.002,
+      "duration": 11.488,
+      "distance": 284,
+      "legs": [
+        {
+          "via_waypoints": [],
+          "admins": [
+            {
+              "iso_3166_1_alpha3": "USA",
+              "iso_3166_1": "US"
+            }
+          ],
+          "weight": 56.002,
+          "duration": 11.488,
+          "steps": [
+            {
+              "bannerInstructions": [
+                {
+                  "primary": {
+                    "type": "arrive",
+                    "text": "You have arrived at your destination.",
+                    "components": [
+                      {
+                        "text": "You have arrived at your destination.",
+                        "type": "text"
+                      }
+                    ]
+                  },
+                  "distanceAlongGeometry": 284
+                }
+              ],
+              "voiceInstructions": [
+                {
+                  "announcement": "Drive west on Alaska 1, Seward Highway. Then You will arrive at your destination.",
+                  "distanceAlongGeometry": 284
+                },
+                {
+                  "announcement": "You will arrive at your destination.",
+                  "distanceAlongGeometry": 142
+                },
+                {
+                  "announcement": "You have arrived at your destination.",
+                  "distanceAlongGeometry": 123.6
+                }
+              ],
+              "intersections": [
+                {
+                  "bearings": [
+                    288
+                  ],
+                  "entry": [
+                    true
+                  ],
+                  "admin_index": 0,
+                  "out": 0,
+                  "geometry_index": 0,
+                  "location": [
+                    -149.543469,
+                    60.534716
+                  ]
+                }
+              ],
+              "maneuver": {
+                "instruction": "Drive west on AK 1/Seward Highway.",
+                "type": "depart",
+                "bearing_after": 288,
+                "bearing_before": 0,
+                "location": [
+                  -149.543469,
+                  60.534716
+                ]
+              },
+              "name": "Seward Highway",
+              "duration": 11.488,
+              "distance": 284,
+              "driving_side": "right",
+              "weight": 56.002,
+              "mode": "driving",
+              "ref": "AK 1",
+              "geometry": "wzvmrBxalf|GcCrX}A|Nu@jI}@pMkBtZ{@x^_Afj@Inn@`@veB"
+            },
+            {
+              "intersections": [
+                {
+                  "bearings": [
+                    89
+                  ],
+                  "entry": [
+                    true
+                  ],
+                  "in": 0,
+                  "admin_index": 0,
+                  "geometry_index": 9,
+                  "location": [
+                    -149.548581,
+                    60.534991
+                  ]
+                }
+              ],
+              "voiceInstructions": [
+                {
+                  "announcement": "Drive west on Alaska 1, Seward Highway. Then You will arrive at your destination.",
+                  "distanceAlongGeometry": 0
+                },
+                {
+                  "announcement": "You will arrive at your destination.",
+                  "distanceAlongGeometry": 0
+                },
+                {
+                  "announcement": "You have arrived at your destination.",
+                  "distanceAlongGeometry": 0
+                }
+              ],
+              "bannerInstructions": [
+                {
+                  "primary": {
+                    "type": "arrive",
+                    "text": "You have arrived at your destination.",
+                    "components": [
+                      {
+                        "text": "You have arrived at your destination.",
+                        "type": "text"
+                      }
+                    ]
+                  },
+                  "distanceAlongGeometry": 0
+                }
+              ],
+              "maneuver": {
+                "instruction": "You have arrived at your destination.",
+                "type": "arrive",
+                "bearing_after": 0,
+                "bearing_before": 269,
+                "location": [
+                  -149.548581,
+                  60.534991
+                ]
+              },
+              "name": "Seward Highway",
+              "duration": 0,
+              "distance": 0,
+              "driving_side": "right",
+              "weight": 0,
+              "mode": "driving",
+              "ref": "AK 1",
+              "geometry": "}kwmrBhavf|G??"
+            }
+          ],
+          "distance": 284,
+          "summary": "AK 1"
+        }
+      ],
+      "geometry": "wzvmrBxalf|GcCrX}A|Nu@jI}@pMkBtZ{@x^_Afj@Inn@`@veB"
+    }
+  ],
+  "waypoints": [
+    {
+      "distance": 0,
+      "name": "AK 1",
+      "location": [
+        -149.543469,
+        60.534715
+      ]
+    },
+    {
+      "distance": 0,
+      "name": "AK 1",
+      "location": [
+        -149.548581,
+        60.534991
+      ]
+    }
+  ],
+  "code": "Ok"
+}

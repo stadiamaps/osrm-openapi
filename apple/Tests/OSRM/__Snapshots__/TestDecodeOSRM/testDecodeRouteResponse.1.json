@@ -1,0 +1,166 @@
+{
+  "code" : "Ok",
+  "routes" : [
+    {
+      "distance" : 284,
+      "duration" : 11.488,
+      "geometry" : "wzvmrBxalf|GcCrX}A|Nu@jI}@pMkBtZ{@x^_Afj@Inn@`@veB",
+      "legs" : [
+        {
+          "distance" : 284,
+          "duration" : 11.488,
+          "steps" : [
+            {
+              "bannerInstructions" : [
+                {
+                  "distanceAlongGeometry" : 284,
+                  "primary" : {
+                    "components" : [
+                      {
+                        "text" : "You have arrived at your destination.",
+                        "type" : "text"
+                      }
+                    ],
+                    "text" : "You have arrived at your destination.",
+                    "type" : "arrive"
+                  }
+                }
+              ],
+              "distance" : 284,
+              "driving_side" : "right",
+              "duration" : 11.488,
+              "geometry" : "wzvmrBxalf|GcCrX}A|Nu@jI}@pMkBtZ{@x^_Afj@Inn@`@veB",
+              "intersections" : [
+                {
+                  "bearings" : [
+                    288
+                  ],
+                  "entry" : [
+                    true
+                  ],
+                  "location" : [
+                    -149.543469,
+                    60.534716
+                  ],
+                  "out" : 0
+                }
+              ],
+              "maneuver" : {
+                "bearing_after" : 288,
+                "bearing_before" : 0,
+                "location" : [
+                  -149.543469,
+                  60.534716
+                ],
+                "type" : "depart"
+              },
+              "mode" : "driving",
+              "name" : "Seward Highway",
+              "ref" : "AK 1",
+              "voiceInstructions" : [
+                {
+                  "announcement" : "Drive west on Alaska 1, Seward Highway. Then You will arrive at your destination.",
+                  "distanceAlongGeometry" : 284
+                },
+                {
+                  "announcement" : "You will arrive at your destination.",
+                  "distanceAlongGeometry" : 142
+                },
+                {
+                  "announcement" : "You have arrived at your destination.",
+                  "distanceAlongGeometry" : 123.6
+                }
+              ],
+              "weight" : 56.002
+            },
+            {
+              "bannerInstructions" : [
+                {
+                  "distanceAlongGeometry" : 0,
+                  "primary" : {
+                    "components" : [
+                      {
+                        "text" : "You have arrived at your destination.",
+                        "type" : "text"
+                      }
+                    ],
+                    "text" : "You have arrived at your destination.",
+                    "type" : "arrive"
+                  }
+                }
+              ],
+              "distance" : 0,
+              "driving_side" : "right",
+              "duration" : 0,
+              "geometry" : "}kwmrBhavf|G??",
+              "intersections" : [
+                {
+                  "bearings" : [
+                    89
+                  ],
+                  "entry" : [
+                    true
+                  ],
+                  "in" : 0,
+                  "location" : [
+                    -149.548581,
+                    60.534991
+                  ]
+                }
+              ],
+              "maneuver" : {
+                "bearing_after" : 0,
+                "bearing_before" : 269,
+                "location" : [
+                  -149.548581,
+                  60.534991
+                ],
+                "type" : "arrive"
+              },
+              "mode" : "driving",
+              "name" : "Seward Highway",
+              "ref" : "AK 1",
+              "voiceInstructions" : [
+                {
+                  "announcement" : "Drive west on Alaska 1, Seward Highway. Then You will arrive at your destination.",
+                  "distanceAlongGeometry" : 0
+                },
+                {
+                  "announcement" : "You will arrive at your destination.",
+                  "distanceAlongGeometry" : 0
+                },
+                {
+                  "announcement" : "You have arrived at your destination.",
+                  "distanceAlongGeometry" : 0
+                }
+              ],
+              "weight" : 0
+            }
+          ],
+          "summary" : "AK 1",
+          "weight" : 56.002
+        }
+      ],
+      "weight" : 56.002,
+      "weight_name" : "auto"
+    }
+  ],
+  "waypoints" : [
+    {
+      "distance" : 0,
+      "location" : [
+        -149.543469,
+        60.534715
+      ],
+      "name" : "AK 1"
+    },
+    {
+      "distance" : 0,
+      "location" : [
+        -149.548581,
+        60.534991
+      ],
+      "name" : "AK 1"
+    }
+  ]
+}

@@ -288,7 +288,7 @@ components:
           type: string
         ssmlAnnouncement:
           type: string
-    BannerInstructions:
+    BannerInstruction:
       type: object
       properties:
         distanceAlongGeometry:
