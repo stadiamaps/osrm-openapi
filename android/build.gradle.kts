@@ -58,9 +58,7 @@ tasks.compileKotlin.configure {
 sourceSets {
     val main by getting
     val osrm by swaggerSources.getting
-    val srcDir = "${osrm.code.outputDir}/src/main/kotlin"
-    print("SourceSets srcDir: $srcDir")
-    main.kotlin.srcDir(srcDir)
+    main.kotlin.srcDir("${osrm.code.outputDir}/src/main/kotlin")
 }
 
 publishing {
