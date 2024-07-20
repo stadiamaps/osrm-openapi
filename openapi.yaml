@@ -3,6 +3,7 @@ info:
   title: OSRM API v5.22.0
   description: Open Source Routing Machine Models
   version: "1"
+paths: {}
 components:
   schemas:
     ApiResponse:
@@ -201,12 +202,14 @@ components:
         distance:
           type: array
           items:
-            type: double
+            type: number
+            format: double
           description: The distance, in metres, between each pair of coordinates
         duration:
           type: array
           items:
-            type: double
+            type: number
+            format: double
           description: The duration between each pair of coordinates, in seconds
         datasources:
           type: array
