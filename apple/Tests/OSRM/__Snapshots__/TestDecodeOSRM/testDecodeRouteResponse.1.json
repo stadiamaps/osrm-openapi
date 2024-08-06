@@ -138,6 +138,9 @@
             }
           ],
           "summary" : "AK 1",
+          "via_waypoints" : [
+
+          ],
           "weight" : 56.002
         }
       ],
