@@ -149,7 +149,7 @@ components:
           type: array
           nullable: true
           default: null
-          description: A valhalla and mapbox extension for via waypoints.
+          description: A Mapbox and Valhalla extension which indicates which waypoints are passed through rather than creating a new leg.
           items:
             type: string
     RouteStep:
