@@ -145,6 +145,13 @@ components:
             $ref: '#/components/schemas/RouteStep'
         annotation:
           $ref: '#/components/schemas/Annotation'
+        via_waypoints:
+          type: array
+          nullable: true
+          default: null
+          description: A valhalla and mapbox extension for via waypoints.
+          items:
+            type: string
     RouteStep:
       type: object
       properties:

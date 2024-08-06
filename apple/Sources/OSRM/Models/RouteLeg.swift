@@ -19,14 +19,17 @@ public struct RouteLeg: Codable, Hashable {
     public var summary: String?
     public var steps: [RouteStep]?
     public var annotation: Annotation?
+    /** A valhalla and mapbox extension for via waypoints. */
+    public var viaWaypoints: [String]?
 
-    public init(distance: Double? = nil, duration: Double? = nil, weight: Double? = nil, summary: String? = nil, steps: [RouteStep]? = nil, annotation: Annotation? = nil) {
+    public init(distance: Double? = nil, duration: Double? = nil, weight: Double? = nil, summary: String? = nil, steps: [RouteStep]? = nil, annotation: Annotation? = nil, viaWaypoints: [String]? = nil) {
         self.distance = distance
         self.duration = duration
         self.weight = weight
         self.summary = summary
         self.steps = steps
         self.annotation = annotation
+        self.viaWaypoints = viaWaypoints
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
@@ -36,6 +39,7 @@ public struct RouteLeg: Codable, Hashable {
         case summary
         case steps
         case annotation
+        case viaWaypoints = "via_waypoints"
     }
 
     // Encodable protocol methods
@@ -48,5 +52,6 @@ public struct RouteLeg: Codable, Hashable {
         try container.encodeIfPresent(summary, forKey: .summary)
         try container.encodeIfPresent(steps, forKey: .steps)
         try container.encodeIfPresent(annotation, forKey: .annotation)
+        try container.encodeIfPresent(viaWaypoints, forKey: .viaWaypoints)
     }
 }
