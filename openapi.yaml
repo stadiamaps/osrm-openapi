@@ -145,6 +145,13 @@ components:
             $ref: '#/components/schemas/RouteStep'
         annotation:
           $ref: '#/components/schemas/Annotation'
+        via_waypoints:
+          type: array
+          nullable: true
+          default: null
+          description: A Mapbox and Valhalla extension which indicates which waypoints are passed through rather than creating a new leg.
+          items:
+            type: string
     RouteStep:
       type: object
       properties:
