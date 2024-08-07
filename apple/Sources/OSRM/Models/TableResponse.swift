@@ -29,7 +29,7 @@ public struct TableResponse: Codable, Hashable {
 
     public var code: Code
     public var message: String?
-    public var dataVersion: Date?
+    public var dataVersion: String?
     /** array of arrays that stores the matrix in row-major order. durations[i][j] gives the travel time from the i-th waypoint to the j-th waypoint. Values are given in seconds. */
     public var durations: [[Double]]?
     public var distances: [[Double]]?
@@ -37,7 +37,7 @@ public struct TableResponse: Codable, Hashable {
     public var destinations: [Waypoint]?
     public var fallbackSpeedCells: [[Int]]?
 
-    public init(code: Code, message: String? = nil, dataVersion: Date? = nil, durations: [[Double]]? = nil, distances: [[Double]]? = nil, sources: [Waypoint]? = nil, destinations: [Waypoint]? = nil, fallbackSpeedCells: [[Int]]? = nil) {
+    public init(code: Code, message: String? = nil, dataVersion: String? = nil, durations: [[Double]]? = nil, distances: [[Double]]? = nil, sources: [Waypoint]? = nil, destinations: [Waypoint]? = nil, fallbackSpeedCells: [[Int]]? = nil) {
         self.code = code
         self.message = message
         self.dataVersion = dataVersion

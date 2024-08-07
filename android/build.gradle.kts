@@ -79,7 +79,7 @@ publishing {
 
             groupId = "com.osrm"
             artifactId = "api"
-            version = "0.0.8"
+            version = "0.0.9"
         }
     }
 }

@@ -29,10 +29,10 @@ public struct NearestResponse: Codable, Hashable {
 
     public var code: Code
     public var message: String?
-    public var dataVersion: Date?
+    public var dataVersion: String?
     public var waypoints: [NearestWaypoint]?
 
-    public init(code: Code, message: String? = nil, dataVersion: Date? = nil, waypoints: [NearestWaypoint]? = nil) {
+    public init(code: Code, message: String? = nil, dataVersion: String? = nil, waypoints: [NearestWaypoint]? = nil) {
         self.code = code
         self.message = message
         self.dataVersion = dataVersion

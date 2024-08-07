@@ -29,11 +29,11 @@ public struct RouteResponse: Codable, Hashable {
 
     public var code: Code
     public var message: String?
-    public var dataVersion: Date?
+    public var dataVersion: String?
     public var waypoints: [Waypoint]?
     public var routes: [Route]?
 
-    public init(code: Code, message: String? = nil, dataVersion: Date? = nil, waypoints: [Waypoint]? = nil, routes: [Route]? = nil) {
+    public init(code: Code, message: String? = nil, dataVersion: String? = nil, waypoints: [Waypoint]? = nil, routes: [Route]? = nil) {
         self.code = code
         self.message = message
         self.dataVersion = dataVersion

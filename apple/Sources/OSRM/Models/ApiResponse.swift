@@ -29,9 +29,9 @@ public struct ApiResponse: Codable, Hashable {
 
     public var code: Code
     public var message: String?
-    public var dataVersion: Date?
+    public var dataVersion: String?
 
-    public init(code: Code, message: String? = nil, dataVersion: Date? = nil) {
+    public init(code: Code, message: String? = nil, dataVersion: String? = nil) {
         self.code = code
         self.message = message
         self.dataVersion = dataVersion
