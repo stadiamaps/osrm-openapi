@@ -12,10 +12,10 @@ import Foundation
 
 public struct ViaWaypoint: Codable, Hashable {
     public var distanceFromStart: Double?
-    public var geometryIndex: Double?
+    public var geometryIndex: Int?
     public var waypointIndex: Int?
 
-    public init(distanceFromStart: Double? = nil, geometryIndex: Double? = nil, waypointIndex: Int? = nil) {
+    public init(distanceFromStart: Double? = nil, geometryIndex: Int? = nil, waypointIndex: Int? = nil) {
         self.distanceFromStart = distanceFromStart
         self.geometryIndex = geometryIndex
         self.waypointIndex = waypointIndex
