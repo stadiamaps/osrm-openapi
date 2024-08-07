@@ -19,10 +19,10 @@ public struct RouteLeg: Codable, Hashable {
     public var summary: String?
     public var steps: [RouteStep]?
     public var annotation: Annotation?
-    /** A valhalla and mapbox extension for via waypoints. */
-    public var viaWaypoints: [String]?
+    /** A Mapbox and Valhalla extension which indicates which waypoints are passed through rather than creating a new leg. */
+    public var viaWaypoints: [ViaWaypoint]?
 
-    public init(distance: Double? = nil, duration: Double? = nil, weight: Double? = nil, summary: String? = nil, steps: [RouteStep]? = nil, annotation: Annotation? = nil, viaWaypoints: [String]? = nil) {
+    public init(distance: Double? = nil, duration: Double? = nil, weight: Double? = nil, summary: String? = nil, steps: [RouteStep]? = nil, annotation: Annotation? = nil, viaWaypoints: [ViaWaypoint]? = nil) {
         self.distance = distance
         self.duration = duration
         self.weight = weight

@@ -151,7 +151,7 @@ components:
           default: null
           description: A Mapbox and Valhalla extension which indicates which waypoints are passed through rather than creating a new leg.
           items:
-            type: string
+            type: ViaWaypoint
     RouteStep:
       type: object
       properties:
@@ -358,6 +358,15 @@ components:
           format: double
         hint:
           type: string
+    ViaWaypoint:
+      type: object
+      properties:
+        distance_from_start:
+          type: number
+        geometry_index:
+          type: number
+        waypoint_index:
+          type: integer
     NearestWaypoint:
       allOf:
         - $ref: '#/components/schemas/Waypoint'
@@ -376,3 +385,4 @@ components:
               type: integer
             waypoint_index:
               type: integer
+
