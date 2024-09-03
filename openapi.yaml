@@ -151,7 +151,7 @@ components:
           default: null
           description: A Mapbox and Valhalla extension which indicates which waypoints are passed through rather than creating a new leg.
           items:
-            type: ViaWaypoint
+            $ref: '#/components/schemas/ViaWaypoint'
     RouteStep:
       type: object
       properties:
