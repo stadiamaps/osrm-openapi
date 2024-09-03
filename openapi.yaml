@@ -171,6 +171,7 @@ components:
             This is a Valhalla extension to the OSRM spec.
           items:
             $ref: '#/components/schemas/ViaWaypoint'
+        # TODO: admins
     RouteStep:
       type: object
       description: >-
@@ -191,7 +192,7 @@ components:
           format: double
           description: The estimated travel time, in number of seconds.
         geometry:
-          type: object
+          type: object  # FIXME
         weight:
           type: number
           format: double
@@ -207,8 +208,10 @@ components:
             Pronunciation of the name (if available).
             The format of this varies by implementation/vendor.
         destinations:
+          # FIXME
           type: object
         exits:
+          # FIXME
           type: object
         mode:
           type: string
@@ -250,6 +253,7 @@ components:
     Annotation:
       type: object
       properties:
+        # TODO: Refactor into properties?
         distance:
           type: array
           items:
