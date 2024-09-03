@@ -360,6 +360,7 @@ components:
           enum:
             - uturn
             - sharp right
+            - right
             - slight right
             - straight
             - slight left
@@ -437,7 +438,8 @@ components:
             The index into the admin boundaries list on the route leg.
             This is an extension that is not available on OSRM and may not be present on all Mapbox responses.
         duration:
-          type: integer
+          type: number
+          format: double
           description: >-
             The estimated duration, in seconds, to traverse the intersection.
             This is a Valhalla extension to the OSRM spec.

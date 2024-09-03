@@ -13,7 +13,7 @@ class ModelTest {
 
   @Test
   fun testWaypoint() {
-    val waypoint = Waypoint("name", listOf(1.0, 2.0))
+    val waypoint = Waypoint(listOf(1.0, 2.0),  42.0,"name")
     assertEquals("name", waypoint.name)
     assertEquals(listOf(1.0, 2.0), waypoint.location)
   }
@@ -28,10 +28,10 @@ class ModelTest {
 
     val route = response?.routes?.first() ?: fail("response must have at least one route")
 
-    assertEquals(1, route.legs?.size)
-    assertEquals(4, route.legs?.first()?.steps?.size)
+    assertEquals(1, route.legs.size)
+    assertEquals(4, route.legs.first().steps.size)
 
-    val step = route.legs?.first()?.steps?.first() ?: fail("route leg must have at least one step")
+    val step = route.legs.first().steps.first()
 
     assertEquals("State Highway 65", step.name)
     assertEquals("tezuoAezllgIfhAdStpAzV`hAxQlxA|X|i@vIdQpCnxClh@laCjd@dRdDr}@zOxgApR`pBf^jk@hKvmAnUfJ|AdDj@tCR", step.geometry)
