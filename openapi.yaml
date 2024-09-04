@@ -171,7 +171,11 @@ components:
             This is a Valhalla extension to the OSRM spec.
           items:
             $ref: '#/components/schemas/ViaWaypoint'
-        # TODO: admins
+        admins:
+          type: array
+          description: Administrative regions visited along the leg.
+          items:
+            $ref: '#/components/schemas/Admin'
     RouteStep:
       type: object
       description: >-
@@ -250,10 +254,29 @@ components:
           description: >-
             A list of announcements which should be displayed prominently on screen at various points along the maneuver.
             This is a Valhalla extension to the OSRM spec.
+        speedLimitSign:
+          type: string
+          enum:
+            - mutcd
+            - vienna
+          description: >-
+            The style of speed limit signs used along the step.
+            This is a Valhalla extension to the OSRM spec,
+            and is only included when speed limits are present in the response.
+        speedLimitUnit:
+          type: string
+          description: >-
+            The unit of measure that is used locally along the step.
+            This may be different from the unit used in maxspeed annotations,
+            and is provided so that apps can localize their display.
+            This is a Valhalla extension to the OSRM spec,
+            and is only included when speed limits are present in the response.
     Annotation:
       type: object
+      required:
+        - distance
+        - duration
       properties:
-        # TODO: Refactor into properties?
         distance:
           type: array
           items:
@@ -296,27 +319,7 @@ components:
         maxspeed:
           type: array
           items:
-            type: object
-            properties:
-              speed:
-                type: integer
-              unit:
-                type: string
-                enum:
-                  - km/h
-                  - mph
-                description: >-
-                  The unit of measure for the speed.
-                  Always included if speed is present.
-              unknown:
-                type: boolean
-                description: True if the speed limit is not known.
-              none:
-                type: boolean
-                description: "True if there is no explicit speed limit (ex: some Autobahn sections)"
-          description: >-
-            The speed limit between the pair of coordinates.
-            Available in Valhalla-derived routers.
+            $ref: '#/components/schemas/SpeedLimit'
     StepManeuver:
       type: object
       required:
@@ -360,19 +363,7 @@ components:
             - roundabout turn
             - notification
         modifier:
-          type: string
-          enum:
-            - uturn
-            - sharp right
-            - right
-            - slight right
-            - straight
-            - slight left
-            - left
-            - sharp left
-          description: >-
-            An optional value indicating the directional change of the maneuver
-            (further clarifying type).
+          $ref: '#/components/schemas/GuidanceModifier'
         exit:
           type: integer
           description: The exit number to take (for roundabouts, rotaries, and number of intersections).
@@ -447,6 +438,23 @@ components:
           description: >-
             The estimated duration, in seconds, to traverse the intersection.
             This is a Valhalla extension to the OSRM spec.
+        turn_duration:
+          type: number
+          format: double
+          description: >-
+            The estimated duration, in seconds, to complete a turn.
+            This is a Valhalla extension to the OSRM spec.
+        turn_weight:
+          type: number
+          format: double
+        geometry_index:
+          type: integer
+          description: >-
+            The index of the intersection in the leg geometry.
+            This is a Valhalla extension to the OSRM spec.
+        weight:
+          type: number
+          format: double
     VoiceInstruction:
       type: object
       required:
@@ -506,31 +514,11 @@ components:
             - exit roundabout
             - exit rotary
         modifier:
-          type: string
-          enum:
-            - uturn
-            - sharp right
-            - right
-            - slight right
-            - slight left
-            - left
-            - sharp left
+          $ref: '#/components/schemas/GuidanceModifier'
         components:
           type: array
           items:
-            type: object
-            properties:
-              text:
-                type: string
-              type:
-                type: string
-                enum:
-                  - text
-                  - icon
-                  - delimiter
-                  - exit-number
-                  - exit
-                  - lane
+            $ref: '#/components/schemas/BannerComponent'
           description: >-
             A list of objects with additional context that allow for visual layout improvements
             beyond what's possible with plain text.
@@ -619,3 +607,63 @@ components:
       minItems: 2
       maxItems: 2
       description: A (longitude, latitude) coordinate pair.
+    Admin:
+      type: object
+      properties:
+        iso_3166_1:
+          type: string
+          description: The ISO 3166-1 two-character code for the admin region.
+        iso_3166_1_alpha3:
+          type: string
+          description: The ISO 3166-1 three-character code for the admin region.
+    SpeedLimit:
+      type: object
+      properties:
+        speed:
+          type: integer
+        unit:
+          type: string
+          enum:
+            - km/h
+            - mph
+          description: >-
+            The unit of measure for the speed.
+            Always included if speed is present.
+        unknown:
+          type: boolean
+          description: True if the speed limit is not known.
+        none:
+          type: boolean
+          description: "True if there is no explicit speed limit (ex: some Autobahn sections)"
+      description: >-
+        The speed limit between the pair of coordinates.
+        Available in Valhalla-derived routers.
+    BannerComponent:
+      type: object
+      properties:
+        text:
+          type: string
+        type:
+          type: string
+          enum:
+            - text
+            - icon
+            - delimiter
+            - exit-number
+            - exit
+            - lane
+    GuidanceModifier:
+      type: string
+      nullable: true
+      enum:
+        - uturn
+        - sharp right
+        - right
+        - slight right
+        - straight
+        - slight left
+        - left
+        - sharp left
+      description: >-
+        An optional value indicating the directional change of the maneuver
+        (further clarifying type).

@@ -11,8 +11,11 @@ import Foundation
 #endif
 
 public struct VoiceInstruction: Codable, Hashable {
+    /** How far (in meters) from the upcoming maneuver the instruction should be announced. */
     public var distanceAlongGeometry: Double
+    /** The plain-text announcement. */
     public var announcement: String
+    /** The announcement in Speech Synthesis Markup Language (SSML). Supported TTS engines include Amazon Polly and Apple's AVSpeechSynthesizer. */
     public var ssmlAnnouncement: String?
 
     public init(distanceAlongGeometry: Double, announcement: String, ssmlAnnouncement: String? = nil) {

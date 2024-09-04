@@ -11,15 +11,42 @@ import Foundation
 #endif
 
 public struct StepManeuver: Codable, Hashable {
-    public var location: [Double]?
-    public var bearingBefore: Int?
-    public var bearingAfter: Int?
-    public var type: String?
-    public var modifier: String?
+    public enum ModelType: String, Codable, CaseIterable {
+        case turn
+        case newName = "new name"
+        case depart
+        case arrive
+        case merge
+        case ramp
+        case onRamp = "on ramp"
+        case offRamp = "off ramp"
+        case fork
+        case endOfRoad = "end of road"
+        case useLane = "use lane"
+        case _continue = "continue"
+        case roundabout
+        case rotary
+        case roundaboutTurn = "roundabout turn"
+        case notification
+    }
+
+    static let locationRule = ArrayRule(minItems: 2, maxItems: 2, uniqueItems: false)
+    /** A (longitude, latitude) coordinate pair. */
+    public var location: [Double]
+    /** A human-readable instruction for the maneuver. This is a Valhalla extension to the OSRM spec. */
+    public var instruction: String?
+    /** The clockwise angle from true north to the direction of travel immediately before the maneuver. */
+    public var bearingBefore: Int
+    /** The clockwise angle from true north to the direction of travel immediately after the maneuver. */
+    public var bearingAfter: Int
+    public var type: ModelType
+    public var modifier: GuidanceModifier?
+    /** The exit number to take (for roundabouts, rotaries, and number of intersections). */
     public var exit: Int?
 
-    public init(location: [Double]? = nil, bearingBefore: Int? = nil, bearingAfter: Int? = nil, type: String? = nil, modifier: String? = nil, exit: Int? = nil) {
+    public init(location: [Double], instruction: String? = nil, bearingBefore: Int, bearingAfter: Int, type: ModelType, modifier: GuidanceModifier? = nil, exit: Int? = nil) {
         self.location = location
+        self.instruction = instruction
         self.bearingBefore = bearingBefore
         self.bearingAfter = bearingAfter
         self.type = type
@@ -29,6 +56,7 @@ public struct StepManeuver: Codable, Hashable {
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case location
+        case instruction
         case bearingBefore = "bearing_before"
         case bearingAfter = "bearing_after"
         case type
@@ -40,10 +68,11 @@ public struct StepManeuver: Codable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(location, forKey: .location)
-        try container.encodeIfPresent(bearingBefore, forKey: .bearingBefore)
-        try container.encodeIfPresent(bearingAfter, forKey: .bearingAfter)
-        try container.encodeIfPresent(type, forKey: .type)
+        try container.encode(location, forKey: .location)
+        try container.encodeIfPresent(instruction, forKey: .instruction)
+        try container.encode(bearingBefore, forKey: .bearingBefore)
+        try container.encode(bearingAfter, forKey: .bearingAfter)
+        try container.encode(type, forKey: .type)
         try container.encodeIfPresent(modifier, forKey: .modifier)
         try container.encodeIfPresent(exit, forKey: .exit)
     }

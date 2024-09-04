@@ -10,16 +10,43 @@ import Foundation
     import AnyCodable
 #endif
 
+/** Detailed information about intersections that the route traverses. For every step, the first intersection is at the location of the maneuver. Additional intersections will be provided for every road or path traversed until the next step. */
 public struct Intersection: Codable, Hashable {
-    public var location: [Double]?
-    public var bearings: [Int]?
-    public var classes: [String]?
-    public var entry: [Bool]?
-    public var _in: Int?
-    public var out: Int?
-    public var lanes: [Lane]?
+    public enum Classes: String, Codable, CaseIterable {
+        case toll
+        case ferry
+        case restricted
+        case motorway
+        case tunnel
+    }
 
-    public init(location: [Double]? = nil, bearings: [Int]? = nil, classes: [String]? = nil, entry: [Bool]? = nil, _in: Int? = nil, out: Int? = nil, lanes: [Lane]? = nil) {
+    static let locationRule = ArrayRule(minItems: 2, maxItems: 2, uniqueItems: false)
+    /** A (longitude, latitude) coordinate pair. */
+    public var location: [Double]?
+    /** A list of bearing values that are available for travel through the intersection. */
+    public var bearings: [Int]?
+    /** The classes of roads exiting the intersection. */
+    public var classes: [Classes]?
+    /** A list of entry flags, which map 1:1 to the bearings. A value of true indicates that the respective road could be entered on a valid route. False indicates that the turn onto the respective road would violate a restriction. */
+    public var entry: [Bool]?
+    /** An index into bearings/entry array. Used to calculate the bearing just before the turn. Namely, the clockwise angle from true north to the direction of travel immediately before the maneuver/passing the intersection. Bearings are given relative to the intersection. To get the bearing in the direction of driving, the bearing has to be rotated by a value of 180. The value is not supplied for depart maneuvers. */
+    public var _in: Int?
+    /** An index into bearings/entry array. Used to calculate the bearing just after the turn. Namely, the clockwise angle from true north to the direction of travel immediately after the maneuver/passing the intersection. This is not supplied for arrive maneuvers. */
+    public var out: Int?
+    /** Available turn lanes at the intersection. May be omitted if no lane information is available for the intersection. */
+    public var lanes: [Lane]?
+    /** The index into the admin boundaries list on the route leg. This is an extension that is not available on OSRM and may not be present on all Mapbox responses. */
+    public var adminIndex: Int?
+    /** The estimated duration, in seconds, to traverse the intersection. This is a Valhalla extension to the OSRM spec. */
+    public var duration: Double?
+    /** The estimated duration, in seconds, to complete a turn. This is a Valhalla extension to the OSRM spec. */
+    public var turnDuration: Double?
+    public var turnWeight: Double?
+    /** The index of the intersection in the leg geometry. This is a Valhalla extension to the OSRM spec. */
+    public var geometryIndex: Int?
+    public var weight: Double?
+
+    public init(location: [Double]? = nil, bearings: [Int]? = nil, classes: [Classes]? = nil, entry: [Bool]? = nil, _in: Int? = nil, out: Int? = nil, lanes: [Lane]? = nil, adminIndex: Int? = nil, duration: Double? = nil, turnDuration: Double? = nil, turnWeight: Double? = nil, geometryIndex: Int? = nil, weight: Double? = nil) {
         self.location = location
         self.bearings = bearings
         self.classes = classes
@@ -27,6 +54,12 @@ public struct Intersection: Codable, Hashable {
         self._in = _in
         self.out = out
         self.lanes = lanes
+        self.adminIndex = adminIndex
+        self.duration = duration
+        self.turnDuration = turnDuration
+        self.turnWeight = turnWeight
+        self.geometryIndex = geometryIndex
+        self.weight = weight
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
@@ -37,6 +70,12 @@ public struct Intersection: Codable, Hashable {
         case _in = "in"
         case out
         case lanes
+        case adminIndex = "admin_index"
+        case duration
+        case turnDuration = "turn_duration"
+        case turnWeight = "turn_weight"
+        case geometryIndex = "geometry_index"
+        case weight
     }
 
     // Encodable protocol methods
@@ -50,5 +89,11 @@ public struct Intersection: Codable, Hashable {
         try container.encodeIfPresent(_in, forKey: ._in)
         try container.encodeIfPresent(out, forKey: .out)
         try container.encodeIfPresent(lanes, forKey: .lanes)
+        try container.encodeIfPresent(adminIndex, forKey: .adminIndex)
+        try container.encodeIfPresent(duration, forKey: .duration)
+        try container.encodeIfPresent(turnDuration, forKey: .turnDuration)
+        try container.encodeIfPresent(turnWeight, forKey: .turnWeight)
+        try container.encodeIfPresent(geometryIndex, forKey: .geometryIndex)
+        try container.encodeIfPresent(weight, forKey: .weight)
     }
 }

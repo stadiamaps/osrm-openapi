@@ -11,14 +11,17 @@ import Foundation
 #endif
 
 public struct TripWaypoint: Codable, Hashable {
+    static let locationRule = ArrayRule(minItems: 2, maxItems: 2, uniqueItems: false)
     public var name: String?
-    public var location: [Double]?
-    public var distance: Double?
+    /** A (longitude, latitude) coordinate pair. */
+    public var location: [Double]
+    /** The distance of the snapped point from the original location. */
+    public var distance: Double
     public var hint: String?
     public var tripsIndex: Int?
     public var waypointIndex: Int?
 
-    public init(name: String? = nil, location: [Double]? = nil, distance: Double? = nil, hint: String? = nil, tripsIndex: Int? = nil, waypointIndex: Int? = nil) {
+    public init(name: String? = nil, location: [Double], distance: Double, hint: String? = nil, tripsIndex: Int? = nil, waypointIndex: Int? = nil) {
         self.name = name
         self.location = location
         self.distance = distance
@@ -41,8 +44,8 @@ public struct TripWaypoint: Codable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(name, forKey: .name)
-        try container.encodeIfPresent(location, forKey: .location)
-        try container.encodeIfPresent(distance, forKey: .distance)
+        try container.encode(location, forKey: .location)
+        try container.encode(distance, forKey: .distance)
         try container.encodeIfPresent(hint, forKey: .hint)
         try container.encodeIfPresent(tripsIndex, forKey: .tripsIndex)
         try container.encodeIfPresent(waypointIndex, forKey: .waypointIndex)

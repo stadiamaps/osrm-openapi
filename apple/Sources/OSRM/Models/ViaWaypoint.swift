@@ -11,11 +11,14 @@ import Foundation
 #endif
 
 public struct ViaWaypoint: Codable, Hashable {
-    public var distanceFromStart: Double?
-    public var geometryIndex: Int?
-    public var waypointIndex: Int?
+    /** The distance from the start of the leg, in meters. */
+    public var distanceFromStart: Double
+    /** The index of the waypoint's location in the route geometry. */
+    public var geometryIndex: Int
+    /** The index of the associated waypoint. */
+    public var waypointIndex: Int
 
-    public init(distanceFromStart: Double? = nil, geometryIndex: Int? = nil, waypointIndex: Int? = nil) {
+    public init(distanceFromStart: Double, geometryIndex: Int, waypointIndex: Int) {
         self.distanceFromStart = distanceFromStart
         self.geometryIndex = geometryIndex
         self.waypointIndex = waypointIndex
@@ -31,8 +34,8 @@ public struct ViaWaypoint: Codable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(distanceFromStart, forKey: .distanceFromStart)
-        try container.encodeIfPresent(geometryIndex, forKey: .geometryIndex)
-        try container.encodeIfPresent(waypointIndex, forKey: .waypointIndex)
+        try container.encode(distanceFromStart, forKey: .distanceFromStart)
+        try container.encode(geometryIndex, forKey: .geometryIndex)
+        try container.encode(waypointIndex, forKey: .waypointIndex)
     }
 }

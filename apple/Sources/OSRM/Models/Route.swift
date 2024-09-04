@@ -11,16 +11,19 @@ import Foundation
 #endif
 
 public struct Route: Codable, Hashable {
-    /** The distance traveled by the route, in double meters. */
-    public var distance: Double?
-    /** The estimated travel time, in double number of seconds. */
-    public var duration: Double?
-    public var geometry: AnyCodable?
+    /** The distance traveled by the route, in meters. */
+    public var distance: Double
+    /** The estimated travel time, in number of seconds. */
+    public var duration: Double
+    /** An encoded polyline (https://developers.google.com/maps/documentation/utilities/polylinealgorithm). */
+    public var geometry: String
+    /** The total cost of the route computed by the routing engine. This is a Valhalla extension to the OSRM spec. */
     public var weight: Double?
+    /** The costing model used for the route. This is an extension from Valhalla-based routers. */
     public var weightName: String?
-    public var legs: [RouteLeg]?
+    public var legs: [RouteLeg]
 
-    public init(distance: Double? = nil, duration: Double? = nil, geometry: AnyCodable? = nil, weight: Double? = nil, weightName: String? = nil, legs: [RouteLeg]? = nil) {
+    public init(distance: Double, duration: Double, geometry: String, weight: Double? = nil, weightName: String? = nil, legs: [RouteLeg]) {
         self.distance = distance
         self.duration = duration
         self.geometry = geometry
@@ -42,11 +45,11 @@ public struct Route: Codable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(distance, forKey: .distance)
-        try container.encodeIfPresent(duration, forKey: .duration)
-        try container.encodeIfPresent(geometry, forKey: .geometry)
+        try container.encode(distance, forKey: .distance)
+        try container.encode(duration, forKey: .duration)
+        try container.encode(geometry, forKey: .geometry)
         try container.encodeIfPresent(weight, forKey: .weight)
         try container.encodeIfPresent(weightName, forKey: .weightName)
-        try container.encodeIfPresent(legs, forKey: .legs)
+        try container.encode(legs, forKey: .legs)
     }
 }

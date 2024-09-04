@@ -11,24 +11,27 @@ import Foundation
 #endif
 
 public struct Annotation: Codable, Hashable {
-    /** The distance, in metres, between each pair of coordinates */
-    public var distance: [Double]?
-    /** The duration between each pair of coordinates, in seconds */
-    public var duration: [Double]?
+    /** The distance, in meters, between each pair of coordinates. */
+    public var distance: [Double]
+    /** The duration between each pair of coordinates, in seconds. */
+    public var duration: [Double]
+    /** The index of the datasource for the speed between each pair of coordinates. 0 is the default profile. Other values are supplied via --segment-speed-file to osrm-contract. This is OSRM-specific and not supported by most other routers. */
     public var datasources: [Int]?
+    /** The OSM node ID for each coordinate along the route (excluding the first/last user-supplied coordinates). This is not included in Valhalla-derived routers. */
     public var nodes: [Int]?
     public var weight: [Int]?
+    /** The estimated speed of travel between each pair of coordinates in meters/sec. */
     public var speed: [Double]?
-    public var metadata: AnnotationMetadata?
+    public var maxspeed: [SpeedLimit]?
 
-    public init(distance: [Double]? = nil, duration: [Double]? = nil, datasources: [Int]? = nil, nodes: [Int]? = nil, weight: [Int]? = nil, speed: [Double]? = nil, metadata: AnnotationMetadata? = nil) {
+    public init(distance: [Double], duration: [Double], datasources: [Int]? = nil, nodes: [Int]? = nil, weight: [Int]? = nil, speed: [Double]? = nil, maxspeed: [SpeedLimit]? = nil) {
         self.distance = distance
         self.duration = duration
         self.datasources = datasources
         self.nodes = nodes
         self.weight = weight
         self.speed = speed
-        self.metadata = metadata
+        self.maxspeed = maxspeed
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
@@ -38,19 +41,19 @@ public struct Annotation: Codable, Hashable {
         case nodes
         case weight
         case speed
-        case metadata
+        case maxspeed
     }
 
     // Encodable protocol methods
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(distance, forKey: .distance)
-        try container.encodeIfPresent(duration, forKey: .duration)
+        try container.encode(distance, forKey: .distance)
+        try container.encode(duration, forKey: .duration)
         try container.encodeIfPresent(datasources, forKey: .datasources)
         try container.encodeIfPresent(nodes, forKey: .nodes)
         try container.encodeIfPresent(weight, forKey: .weight)
         try container.encodeIfPresent(speed, forKey: .speed)
-        try container.encodeIfPresent(metadata, forKey: .metadata)
+        try container.encodeIfPresent(maxspeed, forKey: .maxspeed)
     }
 }

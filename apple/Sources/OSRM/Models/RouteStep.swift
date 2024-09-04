@@ -10,33 +10,52 @@ import Foundation
     import AnyCodable
 #endif
 
+/** A maneuver such as a turn or merge, followed by travel along a single road or path. */
 public struct RouteStep: Codable, Hashable {
     public enum DrivingSide: String, Codable, CaseIterable {
         case _left = "left"
         case _right = "right"
     }
 
-    /** The distance traveled by the route, in double meters. */
-    public var distance: Double?
-    /** The estimated travel time, in double number of seconds. */
-    public var duration: Double?
-    public var geometry: AnyCodable?
+    public enum SpeedLimitSign: String, Codable, CaseIterable {
+        case mutcd
+        case vienna
+    }
+
+    /** The distance traveled by the route, in meters. */
+    public var distance: Double
+    /** The estimated travel time, in number of seconds. */
+    public var duration: Double
+    public var geometry: AnyCodable
     public var weight: Double?
+    /** The name of the segment (ex: road) being traversed */
     public var name: String?
+    /** A reference number of code for the segment being traversed. */
     public var ref: String?
+    /** Pronunciation of the name (if available). The format of this varies by implementation/vendor. */
     public var pronunciation: String?
     public var destinations: AnyCodable?
     public var exits: AnyCodable?
-    public var mode: String?
-    public var maneuver: StepManeuver?
+    /** The mode of travel. */
+    public var mode: String
+    public var maneuver: StepManeuver
     public var intersections: [Intersection]?
+    /** The name of the traffic circle. */
     public var rotaryName: String?
+    /** Pronunciation of the rotary name (if available). The format of this varies by implementation/vendor. */
     public var rotaryPronunciation: String?
+    /** The side of the road on which driving is legal for this step. */
     public var drivingSide: DrivingSide?
+    /** A list of announcements which should be spoken at various points along the maneuver. This is a Valhalla extension to the OSRM spec. */
     public var voiceInstructions: [VoiceInstruction]?
+    /** A list of announcements which should be displayed prominently on screen at various points along the maneuver. This is a Valhalla extension to the OSRM spec. */
     public var bannerInstructions: [BannerInstruction]?
+    /** The style of speed limit signs used along the step. This is a Valhalla extension to the OSRM spec, and is only included when speed limits are present in the response. */
+    public var speedLimitSign: SpeedLimitSign?
+    /** The unit of measure that is used locally along the step. This may be different from the unit used in maxspeed annotations, and is provided so that apps can localize their display. This is a Valhalla extension to the OSRM spec, and is only included when speed limits are present in the response. */
+    public var speedLimitUnit: String?
 
-    public init(distance: Double? = nil, duration: Double? = nil, geometry: AnyCodable? = nil, weight: Double? = nil, name: String? = nil, ref: String? = nil, pronunciation: String? = nil, destinations: AnyCodable? = nil, exits: AnyCodable? = nil, mode: String? = nil, maneuver: StepManeuver? = nil, intersections: [Intersection]? = nil, rotaryName: String? = nil, rotaryPronunciation: String? = nil, drivingSide: DrivingSide? = nil, voiceInstructions: [VoiceInstruction]? = nil, bannerInstructions: [BannerInstruction]? = nil) {
+    public init(distance: Double, duration: Double, geometry: AnyCodable, weight: Double? = nil, name: String? = nil, ref: String? = nil, pronunciation: String? = nil, destinations: AnyCodable? = nil, exits: AnyCodable? = nil, mode: String, maneuver: StepManeuver, intersections: [Intersection]? = nil, rotaryName: String? = nil, rotaryPronunciation: String? = nil, drivingSide: DrivingSide? = nil, voiceInstructions: [VoiceInstruction]? = nil, bannerInstructions: [BannerInstruction]? = nil, speedLimitSign: SpeedLimitSign? = nil, speedLimitUnit: String? = nil) {
         self.distance = distance
         self.duration = duration
         self.geometry = geometry
@@ -54,6 +73,8 @@ public struct RouteStep: Codable, Hashable {
         self.drivingSide = drivingSide
         self.voiceInstructions = voiceInstructions
         self.bannerInstructions = bannerInstructions
+        self.speedLimitSign = speedLimitSign
+        self.speedLimitUnit = speedLimitUnit
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
@@ -74,28 +95,32 @@ public struct RouteStep: Codable, Hashable {
         case drivingSide = "driving_side"
         case voiceInstructions
         case bannerInstructions
+        case speedLimitSign
+        case speedLimitUnit
     }
 
     // Encodable protocol methods
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(distance, forKey: .distance)
-        try container.encodeIfPresent(duration, forKey: .duration)
-        try container.encodeIfPresent(geometry, forKey: .geometry)
+        try container.encode(distance, forKey: .distance)
+        try container.encode(duration, forKey: .duration)
+        try container.encode(geometry, forKey: .geometry)
         try container.encodeIfPresent(weight, forKey: .weight)
         try container.encodeIfPresent(name, forKey: .name)
         try container.encodeIfPresent(ref, forKey: .ref)
         try container.encodeIfPresent(pronunciation, forKey: .pronunciation)
         try container.encodeIfPresent(destinations, forKey: .destinations)
         try container.encodeIfPresent(exits, forKey: .exits)
-        try container.encodeIfPresent(mode, forKey: .mode)
-        try container.encodeIfPresent(maneuver, forKey: .maneuver)
+        try container.encode(mode, forKey: .mode)
+        try container.encode(maneuver, forKey: .maneuver)
         try container.encodeIfPresent(intersections, forKey: .intersections)
         try container.encodeIfPresent(rotaryName, forKey: .rotaryName)
         try container.encodeIfPresent(rotaryPronunciation, forKey: .rotaryPronunciation)
         try container.encodeIfPresent(drivingSide, forKey: .drivingSide)
         try container.encodeIfPresent(voiceInstructions, forKey: .voiceInstructions)
         try container.encodeIfPresent(bannerInstructions, forKey: .bannerInstructions)
+        try container.encodeIfPresent(speedLimitSign, forKey: .speedLimitSign)
+        try container.encodeIfPresent(speedLimitUnit, forKey: .speedLimitUnit)
     }
 }

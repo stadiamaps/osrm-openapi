@@ -11,12 +11,32 @@ import Foundation
 #endif
 
 public struct BannerContent: Codable, Hashable {
-    public var text: String
-    public var type: String?
-    public var modifier: String?
-    public var components: [BannerContentComponentsInner]?
+    public enum ModelType: String, Codable, CaseIterable {
+        case turn
+        case newName = "new name"
+        case depart
+        case arrive
+        case merge
+        case onRamp = "on ramp"
+        case offRamp = "off ramp"
+        case fork
+        case endOfRoad = "end of road"
+        case _continue = "continue"
+        case roundabout
+        case rotary
+        case roundaboutTurn = "roundabout turn"
+        case notification
+        case exitRoundabout = "exit roundabout"
+        case exitRotary = "exit rotary"
+    }
 
-    public init(text: String, type: String? = nil, modifier: String? = nil, components: [BannerContentComponentsInner]? = nil) {
+    public var text: String
+    public var type: ModelType?
+    public var modifier: GuidanceModifier?
+    /** A list of objects with additional context that allow for visual layout improvements beyond what's possible with plain text. */
+    public var components: [BannerComponent]?
+
+    public init(text: String, type: ModelType? = nil, modifier: GuidanceModifier? = nil, components: [BannerComponent]? = nil) {
         self.text = text
         self.type = type
         self.modifier = modifier
