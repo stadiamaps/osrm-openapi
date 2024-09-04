@@ -212,11 +212,9 @@ components:
             Pronunciation of the name (if available).
             The format of this varies by implementation/vendor.
         destinations:
-          # FIXME
-          type: object
+          type: string
         exits:
-          # FIXME
-          type: object
+          type: string
         mode:
           type: string
           description: The mode of travel.
@@ -273,9 +271,6 @@ components:
             and is only included when speed limits are present in the response.
     Annotation:
       type: object
-      required:
-        - distance
-        - duration
       properties:
         distance:
           type: array

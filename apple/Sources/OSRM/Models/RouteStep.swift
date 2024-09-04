@@ -34,8 +34,8 @@ public struct RouteStep: Codable, Hashable {
     public var ref: String?
     /** Pronunciation of the name (if available). The format of this varies by implementation/vendor. */
     public var pronunciation: String?
-    public var destinations: AnyCodable?
-    public var exits: AnyCodable?
+    public var destinations: String?
+    public var exits: String?
     /** The mode of travel. */
     public var mode: String
     public var maneuver: StepManeuver
@@ -55,7 +55,7 @@ public struct RouteStep: Codable, Hashable {
     /** The unit of measure that is used locally along the step. This may be different from the unit used in maxspeed annotations, and is provided so that apps can localize their display. This is a Valhalla extension to the OSRM spec, and is only included when speed limits are present in the response. */
     public var speedLimitUnit: String?
 
-    public init(distance: Double, duration: Double, geometry: AnyCodable, weight: Double? = nil, name: String? = nil, ref: String? = nil, pronunciation: String? = nil, destinations: AnyCodable? = nil, exits: AnyCodable? = nil, mode: String, maneuver: StepManeuver, intersections: [Intersection]? = nil, rotaryName: String? = nil, rotaryPronunciation: String? = nil, drivingSide: DrivingSide? = nil, voiceInstructions: [VoiceInstruction]? = nil, bannerInstructions: [BannerInstruction]? = nil, speedLimitSign: SpeedLimitSign? = nil, speedLimitUnit: String? = nil) {
+    public init(distance: Double, duration: Double, geometry: AnyCodable, weight: Double? = nil, name: String? = nil, ref: String? = nil, pronunciation: String? = nil, destinations: String? = nil, exits: String? = nil, mode: String, maneuver: StepManeuver, intersections: [Intersection]? = nil, rotaryName: String? = nil, rotaryPronunciation: String? = nil, drivingSide: DrivingSide? = nil, voiceInstructions: [VoiceInstruction]? = nil, bannerInstructions: [BannerInstruction]? = nil, speedLimitSign: SpeedLimitSign? = nil, speedLimitUnit: String? = nil) {
         self.distance = distance
         self.duration = duration
         self.geometry = geometry
