@@ -1,9 +1,12 @@
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.KotlinJvm
+import com.vanniktech.maven.publish.SonatypeHost
 import org.hidetake.gradle.swagger.generator.GenerateSwaggerCode
 
 plugins {
     kotlin("jvm")
-    id("org.hidetake.swagger.generator") version "2.19.2"
-    `maven-publish`
+    alias(libs.plugins.swagger.codegen)
+    alias(libs.plugins.maven.publish)
 }
 
 repositories {
@@ -11,18 +14,21 @@ repositories {
 }
 
 dependencies {
-    swaggerCodegen("org.openapitools:openapi-generator-cli:7.5.0")
+    swaggerCodegen(libs.openapi.generator)
 
     // Dependencies of the generated code. Check out `build.gradle` in your build folder later if you're curious.
-    val moshiVersion = "1.15.1"
-    implementation("com.squareup.moshi:moshi-kotlin:$moshiVersion")
-    implementation("com.squareup.moshi:moshi-adapters:$moshiVersion")
+    implementation(libs.moshi.kotlin)
+    implementation(libs.moshi.adapters)
 
     testImplementation(kotlin("test"))
 }
 
 kotlin {
     jvmToolchain(17)
+}
+
+java {
+    withSourcesJar()
 }
 
 tasks.test {
@@ -55,31 +61,59 @@ tasks.compileKotlin.configure {
     dependsOn(tasks.generateSwaggerCode)
 }
 
+// This is a dependency for mavenPublishing.
+tasks.named("sourcesJar") {
+    dependsOn(tasks.generateSwaggerCode)
+}
+
 sourceSets {
     val main by getting
     val osrm by swaggerSources.getting
     main.kotlin.srcDir("${osrm.code.outputDir}/src/main/kotlin")
 }
 
-publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/stadiamaps/osrm-openapi")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
-        }
+val libraryVersion: String by extra
+
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
+
+    if (libraryVersion == "unspecified") {
+        throw GradleException("libraryVersion must be specified in settings.gradle.kts")
     }
 
-    publications {
-        register<MavenPublication>("gpr") {
-            from(components["java"])
+    coordinates("com.stadiamaps", "osrm-openapi", libraryVersion)
 
-            groupId = "com.osrm"
-            artifactId = "api"
-            version = "0.0.9"
+    // TODO: Convert to Dokka?
+    configure(KotlinJvm(sourcesJar = true, javadocJar = JavadocJar.Javadoc()))
+
+    pom {
+        name.set("OSRM API Models")
+        description.set("Serializable objects to build OSRM's API models.")
+        url.set("https://github.com/stadiamaps/osrm-openapi")
+
+        licenses {
+            license {
+                name = "BSD-3-Clause"
+                url = "https://spdx.org/licenses/BSD-3-Clause.html"
+            }
+        }
+        developers {
+            developer {
+                name = "Jacob Fielding"
+                organization = "Rallista"
+                organizationUrl = "https://rallista.app/"
+            }
+            developer {
+                name = "Ian Wagner"
+                organization = "Stadia Maps"
+                organizationUrl = "https://stadiamaps.com/"
+            }
+        }
+        scm {
+            connection = "scm:git:https://github.com/stadiamaps/osrm-openapi.git"
+            developerConnection = "scm:git:ssh://github.com/stadiamaps/osrm-openapi.git"
+            url = "http://github.com/stadiamaps/osrm-openapi"
         }
     }
 }
