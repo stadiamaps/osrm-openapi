@@ -11,18 +11,21 @@ import Foundation
 #endif
 
 public struct RouteLeg: Codable, Hashable {
-    /** The distance traveled by the route, in double meters. */
-    public var distance: Double?
-    /** The estimated travel time, in double number of seconds. */
-    public var duration: Double?
+    /** The distance traveled by the route, in meters. */
+    public var distance: Double
+    /** The estimated travel time, in number of seconds. */
+    public var duration: Double
+    /** The total cost of the leg computed by the routing engine. This is a Valhalla extension to the OSRM spec. */
     public var weight: Double?
     public var summary: String?
-    public var steps: [RouteStep]?
+    public var steps: [RouteStep]
     public var annotation: Annotation?
-    /** A Mapbox and Valhalla extension which indicates which waypoints are passed through rather than creating a new leg. */
+    /** Indicates which waypoints are passed through rather than creating a new leg. This is a Valhalla extension to the OSRM spec. */
     public var viaWaypoints: [ViaWaypoint]?
+    /** Administrative regions visited along the leg. */
+    public var admins: [Admin]?
 
-    public init(distance: Double? = nil, duration: Double? = nil, weight: Double? = nil, summary: String? = nil, steps: [RouteStep]? = nil, annotation: Annotation? = nil, viaWaypoints: [ViaWaypoint]? = nil) {
+    public init(distance: Double, duration: Double, weight: Double? = nil, summary: String? = nil, steps: [RouteStep], annotation: Annotation? = nil, viaWaypoints: [ViaWaypoint]? = nil, admins: [Admin]? = nil) {
         self.distance = distance
         self.duration = duration
         self.weight = weight
@@ -30,6 +33,7 @@ public struct RouteLeg: Codable, Hashable {
         self.steps = steps
         self.annotation = annotation
         self.viaWaypoints = viaWaypoints
+        self.admins = admins
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
@@ -40,18 +44,20 @@ public struct RouteLeg: Codable, Hashable {
         case steps
         case annotation
         case viaWaypoints = "via_waypoints"
+        case admins
     }
 
     // Encodable protocol methods
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(distance, forKey: .distance)
-        try container.encodeIfPresent(duration, forKey: .duration)
+        try container.encode(distance, forKey: .distance)
+        try container.encode(duration, forKey: .duration)
         try container.encodeIfPresent(weight, forKey: .weight)
         try container.encodeIfPresent(summary, forKey: .summary)
-        try container.encodeIfPresent(steps, forKey: .steps)
+        try container.encode(steps, forKey: .steps)
         try container.encodeIfPresent(annotation, forKey: .annotation)
         try container.encodeIfPresent(viaWaypoints, forKey: .viaWaypoints)
+        try container.encodeIfPresent(admins, forKey: .admins)
     }
 }

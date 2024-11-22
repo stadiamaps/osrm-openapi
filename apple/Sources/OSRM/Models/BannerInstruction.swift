@@ -11,6 +11,7 @@ import Foundation
 #endif
 
 public struct BannerInstruction: Codable, Hashable {
+    /** How far (in meters) from the upcoming maneuver the instruction should start being displayed. */
     public var distanceAlongGeometry: Double
     public var primary: BannerContent
     public var secondary: BannerContent?

@@ -45,6 +45,7 @@ if [ "$language" = "swift" ]; then
      swiftformat .build/OpenAPIClient/Classes/OpenAPIsModels
 
      cp .build/OpenAPIClient/Classes/OpenAPIsModels/* ./apple/Sources/OSRM/Models
+     cp .build/OpenAPIClient/Classes/OpenAPIsModels/Validation.swift ./apple/Sources/OSRM/
 else
      echo "Language not supported"
      exit 1
